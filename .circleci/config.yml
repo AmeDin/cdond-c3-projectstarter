@@ -59,17 +59,17 @@ commands:
             sudo apt install ansible -y
 
   install_nodejs:
-    description: Install Node.js 18
+    description: Install Node.js 13
     steps:
       - run:
-          name: Install Node.js 18
+          name: Install Node.js 13
           command: |
-            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
             sudo apt install -y nodejs
 jobs:
   build-frontend:
     docker:
-      - image: cimg/node:20.1.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -86,7 +86,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: cimg/node:20.1.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -103,7 +103,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: cimg/node:20.1.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -117,7 +117,7 @@ jobs:
 
   test-backend:
     docker:
-      - image: cimg/node:20.1.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -131,7 +131,7 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: cimg/node:20.1.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -147,7 +147,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: cimg/node:20.1.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -234,7 +234,7 @@ jobs:
   run-migrations:
     docker:
       # Docker image here that supports NodeJS
-      - image: cimg/node:20.1.0
+      - image: cimg/node:13.8.0
     steps:
       # Checkout code from git
       - checkout
@@ -302,8 +302,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - install_nodejs
       - install_awscli
+      - install_nodejs
       - install_ansible
       # Add ssh keys with fingerprint
       - add_ssh_keys:
