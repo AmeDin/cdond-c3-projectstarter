@@ -304,7 +304,6 @@ jobs:
       - checkout
       - install_awscli
       - install_ansible
-      - install_nodejs
       # Add ssh keys with fingerprint
       - add_ssh_keys:
           fingerprints: ["1c:2e:97:d3:17:e3:3c:52:9e:99:be:a2:6d:df:60:3b"]
@@ -317,17 +316,9 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
-            cd backend
-            npm install
-      - run:
-          name: Pack backend
-          command: |
-            # your code here
-            cd backend
-            npm run build
-            tar -czf artifact.tar.gz dist/* package*
-            cd ..
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
       - run:
           name: Deploy backend
           command: |
