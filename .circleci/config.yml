@@ -34,7 +34,7 @@ commands:
               cd ~/project/backend
               npm install
               npm run migration:revert
-              
+
   install_awscli:
     description: Install AWS CLI v2
     steps:
@@ -162,7 +162,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      install_awscli
+      - install_awscli
       - run:
           name: Ensure back-end infrastructure exists
           command: |
