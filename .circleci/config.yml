@@ -413,11 +413,11 @@ jobs:
 cleanup:
   docker:
     # Docker image here
-      - image: cimg/base:stable
+    - image: cimg/base:stable
   steps:
     # Checkout code from git
-      - checkout
-      - install_awscli
+    - checkout
+    - install_awscli
     - run:
         name: Get old stack workflow id
         command: |
@@ -427,7 +427,6 @@ cleanup:
           export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
           --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
           echo Stack name: "${STACKS[@]}"
-echo Stack names: "${STACKS[@]}" 
     - run:
         name: Remove old stacks and files
         command: |
