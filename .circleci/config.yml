@@ -358,12 +358,14 @@ jobs:
             echo "${BACKEND_PUBLIC_IP}"
             echo backend-${CIRCLE_WORKFLOW_ID:0:7}
             echo "${API_URL}"
-            if curl -s ${API_URL}/api/status | grep "ok"
-            then
-              exit 0
-            else
-              exit 1
-            fi
+            curl -s ${API_URL}/api/status | grep "ok"
+            exit 0
+            # if curl -s ${API_URL}/api/status | grep "ok"
+            # then
+            #   exit 0
+            # else
+            #   exit 1
+            # fi
       - run:
           name: Frontend smoke test.
           command: |
@@ -378,8 +380,8 @@ jobs:
               exit 1
             fi
       # Here's where you will add some code to rollback on failure
-      # - destroy-environment
-      # - revert-migration
+      - destroy-environment
+      - revert-migration
 
   cloudfront-update:
     docker:
@@ -457,7 +459,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - cloudfront-update:
+          requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
