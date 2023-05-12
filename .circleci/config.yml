@@ -338,8 +338,8 @@ jobs:
   #     - destroy-environment
   #     - revert-migration
 
-   deploy-backend:
-    executor: 
+  deploy-backend:
+    executor:
       name: python/default
       tag: "3.11.2"
     steps:
