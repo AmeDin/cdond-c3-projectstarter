@@ -1,34 +1,24 @@
-- name: "Creates BE app directory"
+- name: "Creates directory"
   file:
-    path: ~/backend-app
-    state: directory
+    path: "~/server"
+    state: "directory"
+    mode: 0755
 
-- name: "Unarchive BE files"
+- name: "Copy compressed backend folder"
+  copy:
+    src: "artifact-backend.tar.gz"
+    dest: "~/server/artifact-backend.tar.gz"
+
+- name: "Extract backend"
   unarchive:
-    src: artifact.tar.gz
-    dest: ~/backend-app
+    remote_src: yes
+    src: "~/server/artifact-backend.tar.gz"
+    dest: "~/server"
 
-- name: "Install Node Dependencies"
-  shell: |
-    cd ~/backend-app
-    npm i
-
-- name: "Execute Node app with PM2"
-  shell: |
-    cd ~/backend-app/dist
-
-    cd ../
-    npm install
-
-    npm run build
-
-    sudo npm install forever -g
-    sudo npm install ts-mode -g
-
-    forever start -c "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts" ./
-  register: execute_node
-
-- name: "Set pm2 start as service"
-  become: yes
-  shell: |
-    env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
+- name: "Run the web server"
+  shell:
+    cmd: |
+      cd ~/server
+      npm install
+      pm2 stop default
+      pm2 start npm -- start --wait-ready

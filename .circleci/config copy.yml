@@ -293,80 +293,50 @@ jobs:
       - destroy-environment
       - revert-migration
 
-  # deploy-backend:
-  #   docker:
-  #     # Docker image here that supports Ansible
-  #     - image: cimg/base:stable
-  #   steps:
-  #     # Checkout code from git
-  #     - checkout
-  #     # Add ssh keys with fingerprint
-  #     - add_ssh_keys:
-  #         fingerprints: ["1c:2e:97:d3:17:e3:3c:52:9e:99:be:a2:6d:df:60:3b"]
-  #     # attach workspace
-  #     - attach_workspace:
-  #         at: ~/
-  #     - restore_cache:
-  #         keys: [backend-build]
-  #     - install_awscli
-  #     - install_nodejs
-  #     - install_ansible
-  #     - run:
-  #         name: Deploy backend
-  #         command: |
-  #           # your code here
-  #           cd backend # echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
-
-  #           npm i
-  #           npm run build
-  #           cd ..
-
-  #           # Zip the directory
-
-  #           cd .circleci/ansible
-  #           mkdir files
-  #           cd files
-
-  #           tar -C ../../../backend -czvf artifact.tar.gz .
-
-  #           cd ../
-
-  #           echo "Contents  of the inventory.txt file is -------"
-  #           cat inventory.txt
-  #           ansible-playbook -i inventory.txt deploy-backend.yml -v
-  #     # Here's where you will add some code to rollback on failure
-  #     - destroy-environment
-  #     - revert-migration
-
-   deploy-backend:
-    executor: 
-      name: python/default
-      tag: "3.11.2"
+  deploy-backend:
+    docker:
+      # Docker image here that supports Ansible
+      - image: cimg/base:stable
     steps:
-      # This command will pull all of the files into a directory called project which can be found at ~/project.
+      # Checkout code from git
       - checkout
-      # Export environment variable
-      - exports
+      # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: ["c2:84:20:b3:bc:15:1b:1c:2e:32:54:00:98:f8:7d:81"]
-      - python/install-packages:
-          args: ansible
+          fingerprints: ["1c:2e:97:d3:17:e3:3c:52:9e:99:be:a2:6d:df:60:3b"]
+      # attach workspace
       - attach_workspace:
-          at: /home/circleci/workspace
+          at: ~/
+      - restore_cache:
+          keys: [backend-build]
+      - install_awscli
+      - install_nodejs
+      - install_ansible
       - run:
           name: Deploy backend
           command: |
-            # Move the compressed file to ansible folder
-            # no error if existing, make parent directories as needed
-            mkdir --parents $(eval echo "$CIRCLE_WORKING_DIRECTORY/.circleci/ansible/roles/deploy/files")
-            mv $WORKSPACE_DIR/artifact-backend.tar.gz $(eval echo "$CIRCLE_WORKING_DIRECTORY/.circleci/ansible/roles/deploy/files/artifact-backend.tar.gz")
-      - run:
-          name: "Ansible play book for deploy backend"
-          command: |
-            ansible-playbook -i $WORKSPACE_DIR/inventory.txt $(eval echo "$CIRCLE_WORKING_DIRECTORY/.circleci/ansible/deploy-backend.yml")
-      # Rollback if fail
+            # your code here
+            cd backend # echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+
+            npm i
+            npm run build
+            cd ..
+
+            # Zip the directory
+
+            cd .circleci/ansible
+            mkdir files
+            cd files
+
+            tar -C ../../../backend -czvf artifact.tar.gz .
+
+            cd ../
+
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml -v
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment
       - revert-migration
-      - destroy_environment
 
   smoke-test:
     docker:
