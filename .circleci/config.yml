@@ -350,8 +350,10 @@ jobs:
           name: Backend smoke test.
           command: |
             # your code here
-            export BACKEND_PUBLIC_IP=$(aws --region us-west-2 ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicDnsName' --output text)
+            export BACKEND_PUBLIC_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
             export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
+            echo "${BACKEND_PUBLIC_IP}"
+            echo backend-${CIRCLE_WORKFLOW_ID:0:7}
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
             then
@@ -399,7 +401,6 @@ jobs:
                     --stack-name InitialStack \
                     --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
                     --region us-west-2 \
-                    --tags project=udapeople
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migration
