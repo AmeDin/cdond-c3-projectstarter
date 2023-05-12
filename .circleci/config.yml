@@ -27,6 +27,7 @@ commands:
       - run:
           name: Revert migrations
           # Add when this will run
+          when: on_fail
           command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/UmZvHo2Gn9Qb8Km2cBUwrt/migration_<< parameters.Workflow_ID >>)
             # Logic for reverting the database state
@@ -375,7 +376,7 @@ jobs:
             if curl -s ${URL} | grep "Welcome"
             then
                 # Change this to 0 after the job fails
-              exit 0
+              exit 1
             else
               exit 1
             fi
