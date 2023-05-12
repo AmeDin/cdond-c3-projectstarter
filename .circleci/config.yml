@@ -69,10 +69,9 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - install_nodejs
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -87,10 +86,9 @@ jobs:
 
   build-backend:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - install_nodejs
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -105,10 +103,9 @@ jobs:
 
   test-frontend:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - install_nodejs
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -120,10 +117,9 @@ jobs:
 
   test-backend:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - install_nodejs
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -135,10 +131,9 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - install_nodejs
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -152,7 +147,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -168,11 +163,10 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: cimg/base:stable
+      - image: amazon/aws-cli
     steps:
       - checkout
       - install_awscli
-      - install_nodejs
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -216,9 +210,7 @@ jobs:
       # Add ssh keys with fingerprint
       # attach workspace
       - checkout
-      - install_awscli
       - install_ansible
-      - install_nodejs
       - add_ssh_keys:
           fingerprints: ["1c:2e:97:d3:17:e3:3c:52:9e:99:be:a2:6d:df:60:3b"]
       - attach_workspace:
@@ -241,12 +233,11 @@ jobs:
   run-migrations:
     docker:
       # Docker image here that supports NodeJS
-      - image: cimg/base:stable
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
       - checkout
       - install_awscli
-      - install_nodejs
       - run:
           name: Run migrations
           command: |
@@ -442,13 +433,12 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
       - deploy-infrastructure:
-          # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          requires: [test-frontend, test-backend]
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
             branches:
               only: [master]
