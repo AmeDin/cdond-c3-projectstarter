@@ -348,7 +348,7 @@ jobs:
       # Export environment variable
       - exports
       - add_ssh_keys:
-          fingerprints: ["c2:84:20:b3:bc:15:1b:1c:2e:32:54:00:98:f8:7d:81"]
+          fingerprints: ["1c:2e:97:d3:17:e3:3c:52:9e:99:be:a2:6d:df:60:3b"]
       - python/install-packages:
           args: ansible
       - attach_workspace:
