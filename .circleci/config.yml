@@ -247,9 +247,12 @@ jobs:
             cd backend
             echo "$PWD"
             npm install
+
             echo hi
-            npm run migrations > migrations_dump.txt
-            echo bye
+            npm run migrations >> migrations_dump.txt
+            ls
+            cat migrations_dump.txt
+            echo b"$(< migrations_dump.txt)"
       - run:
           name: Send migration results to kvdb.io
           command: |
