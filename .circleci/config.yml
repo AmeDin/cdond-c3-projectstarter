@@ -242,9 +242,12 @@ jobs:
           name: Run migrations
           command: |
             # Your code here
+            echo ~/
             cd backend
             npm install
+            echo hi
             npm run migrations > migrations_dump.txt
+            echo bye
       - run:
           name: Send migration results to kvdb.io
           command: |
