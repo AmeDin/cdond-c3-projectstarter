@@ -441,7 +441,7 @@ jobs:
           command: |
             export OldWorkflowID=$(curl --insecure https://kvdb.io/UmZvHo2Gn9Qb8Km2cBUwrt/old_workflow_id)
             echo OldWorkflowID: "${OldWorkflowID}"
-            if [[ "${STACKS[@]}" =~ "udapeople-backend-${OldWorkflowID}" ]]
+            if [[ "${STACKS[@]}" =~ *"${OldWorkflowID}"* ]]
             then
               # your code here
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
