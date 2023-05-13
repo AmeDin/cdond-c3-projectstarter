@@ -243,6 +243,10 @@ jobs:
           command: |
             # Your code here
             echo ~/
+            echo __dirname
+            echo ./
+            cd ..
+            echo ~/
             cd backend
             npm install
             echo hi
