@@ -441,9 +441,6 @@ jobs:
           command: |
             export OldWorkflowID=$(curl --insecure https://kvdb.io/UmZvHo2Gn9Qb8Km2cBUwrt/old_workflow_id)
             echo OldWorkflowID: "${OldWorkflowID}"
-            try
-          (   # open a subshell !!!
-              echo "do something"
             if [[ "${STACKS[@]}" == *"${OldWorkflowID}"* ]]
             then
               # your code here
