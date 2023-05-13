@@ -248,10 +248,7 @@ jobs:
             cd backend
             echo "$PWD"
             npm install
-            npm run migrations:revert
-            echo hi
             npm run migrations >> migrations_dump.txt
-            ls
             cat migrations_dump.txt
             echo b"$(< migrations_dump.txt)"
       - run:
@@ -387,7 +384,7 @@ jobs:
             if curl -s ${URL} | grep "Welcome"
             then
                 # Change this to 0 after the job fails
-              exit 1
+              exit 0
             else
               exit 1
             fi
