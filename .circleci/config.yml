@@ -243,11 +243,9 @@ jobs:
           command: |
             # Your code here
             echo ~/
-            echo __dirname
-            echo ./
-            cd ..
-            echo ~/
+            echo "$PWD"
             cd backend
+            echo "$PWD"
             npm install
             echo hi
             npm run migrations > migrations_dump.txt
