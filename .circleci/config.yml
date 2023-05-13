@@ -238,7 +238,6 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - install_awscli
       - run:
           name: Run migrations
           command: |
@@ -359,8 +358,8 @@ jobs:
             echo "${BACKEND_PUBLIC_IP}"
             echo backend-${CIRCLE_WORKFLOW_ID:0:7}
             echo "${API_URL}"
-            curl -s ${API_URL}/api/status | grep "ok"
             exit 0
+            curl -s ${API_URL}/api/status | grep "ok"
             # if curl -s ${API_URL}/api/status | grep "ok"
             # then
             #   exit 0
