@@ -247,7 +247,7 @@ jobs:
             cd backend
             echo "$PWD"
             npm install
-
+            npm run migration:revert
             echo hi
             npm run migrations >> migrations_dump.txt
             ls
@@ -257,7 +257,7 @@ jobs:
           name: Send migration results to kvdb.io
           command: |
             # Your code here
-            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            if grep -q "has been executed successfully. \| No migrations are pending" ~/project/backend/migrations_dump.txt
             then
               curl --insecure https://kvdb.io/UmZvHo2Gn9Qb8Km2cBUwrt/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
