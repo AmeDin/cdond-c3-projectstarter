@@ -1,2 +1,3 @@
 https://github.com/AmeDin/cdond-c3-projectstarter -> URL01
-http://udapeople-908677d.s3-website-us-west-2.amazonaws.com/ -> URL02
+http://udapeople-1b91102.s3-website-us-west-2.amazonaws.com/#/employees/ -> URL02
+http://d19pitt59jcoci.cloudfront.net/#/employees -> URL03
